@@ -1,1 +1,1 @@
-# MNISTClass
+# Deep Fuzzy Neural Network
