@@ -233,8 +233,8 @@ test = deepfuzzy(layers,x_test_flat,x_train_flat,y_train_onehot,y_test_onehot, n
 
 
 
-test.load()
-#test.train()
+#test.load()
+test.train()
 
 
 
