@@ -26,6 +26,7 @@ class dnn:
     self.x = tf.placeholder("float", [None, self.layers[0]])
     self.y = tf.placeholder("float", [None, self.layers[-1]])                                                                                                                                                                                                                                                                                                                                                                                        
   def initialize(self, initializer = 'random'):
+    print(self.layers)
     if initializer == 'random':
       for i in range(len(self.layers)-1):
         self.W.append(tf.Variable(tf.random_normal([self.layers[i], self.layers[i+1]])))
