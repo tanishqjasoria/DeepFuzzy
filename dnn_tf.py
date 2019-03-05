@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
+# softmax cross-entropy loss function!
+# categorical classification DNN
 
 import matplotlib as plt
 from matplotlib.pyplot import imshow
@@ -39,7 +41,8 @@ class dnn:
     for i in range(len(self.layers)-2):
       z = tf.matmul(self.act[-1], self.parameters['W'][i])
       self.act.append(tf.nn.relu(tf.add(z, self.parameters['b'][i])))  #relus
-    self.act.append(tf.add((tf.matmul(self.act[-1], self.parameters['W'][len(self.layers)-2])),self.parameters['b'][len(self.layers)-2]))
+    self.act.append(tf.add((tf.matmul(self.act[-1], \
+                                      self.parameters['W'][len(self.layers)-2])),self.parameters['b'][len(self.layers)-2]))
   def train(self):
     print(self.act[-1].shape)
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.act[-1], labels=self.y))
