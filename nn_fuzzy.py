@@ -47,7 +47,7 @@ def input_fuzzify(x_train, iid = 1, cnn = 0):
             x_train_low.append(pi_membership_function(x_train[i],c_low[i],lambda_low[i]))
             x_train_medium.append(pi_membership_function(x_train[i],c_medium[i],lambda_medium[i]))
             x_train_high.append(pi_membership_function(x_train[i],c_high[i],lambda_high[i]))
-        x_train_new = np.stack([x_train_low, x_train_medium, x_train_high], axis = 2)
+        x_train_new = np.stack([x_train_low, x_train_medium, x_train_high], axis = 1)
         return np.array(x_train_new)
     else:
         x_train_new = []
@@ -102,7 +102,7 @@ def output_normalize(x_train, y_train):
     # print(mean[0][0:100])
     for j in range(y_train.shape[1]):
         mean[j] = mean[j]/no_of_belongings[j]
-         print(no_of_belongings[j])
+        # print(no_of_belongings[j])
 
     # print(mean.shape)
     # print(k)
@@ -130,8 +130,8 @@ def output_normalize(x_train, y_train):
 
 def output_membership_function(n_class, pattern):
     # out is an array on n_class dimension, containing membership of a feature vector to each class
-    denom_generator = 3.5
-    expo_generator = 12
+    denom_generator = 5
+    expo_generator = 2
     out = pattern / denom_generator
     out = np.power(out, expo_generator)
     out = np.reciprocal(1 + out)
@@ -156,11 +156,13 @@ def output_fuzzify(x_train, y_train):
 """Fuzzification"""
 def fuzzify_dataset(x_train, x_test, y_train, y_test, iid = 0, cnn = 0):
     start = time.time()
+    x_train_fuzzy = np.array([])
     x_train_fuzzy = input_fuzzify(x_train, iid, cnn)
     end = time.time()
     print("Time taken to fuzzify - x_train :", end = ' ')
     print(end-start)
     start = time.time()
+    x_test_fuzzy = np.array([])
     x_test_fuzzy = input_fuzzify(x_test)
     end = time.time()
     print("Time taken to fuzzify - x_test :", end = ' ')
