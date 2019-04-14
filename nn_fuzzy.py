@@ -12,17 +12,20 @@ def pi_membership_function(r,c,radius):
         for i in range(len(r)):
             if norm[i] <= radius and norm[i] >= radius/2:
                 norm[i] = (2*((1-norm[i]/radius)**2))
+#                 print("Case 1")
             elif norm[i] < radius/2 and norm[i] >= 0:
                 norm[i] = (1 - 2*((norm[i]/radius)**2))
+#                 print("Case 2")
             else:
                 norm[i] = 0
+#                 print("Case 3")
     return norm
 
 def input_fuzzify(x_train, iid = 1, cnn = 0):
-    fdenom = 2
+    fdenom = 1
     if iid == 1:
-        F_max = np.array([255]*784)
-        F_min = np.array([0]*784)
+        F_max = np.array([255] * x_train.shape[1])
+        F_min = np.array([0] * x_train.shape[1])
     else:
         F_max = np.ndarray.max(x_train, axis = 0)
         F_min = np.ndarray.min(x_train, axis = 0)
@@ -43,19 +46,19 @@ def input_fuzzify(x_train, iid = 1, cnn = 0):
         x_train_low = []
         x_train_medium = []
         x_train_high = []
-        for i in range(len(F_max)):
+        for i in range(x_train.shape[0]):
             x_train_low.append(pi_membership_function(x_train[i],c_low[i],lambda_low[i]))
             x_train_medium.append(pi_membership_function(x_train[i],c_medium[i],lambda_medium[i]))
             x_train_high.append(pi_membership_function(x_train[i],c_high[i],lambda_high[i]))
-        x_train_new = np.stack([x_train_low, x_train_medium, x_train_high], axis = 1)
+        x_train_new = np.stack([np.array(x_train_low).T, np.array(x_train_medium).T, np.array(x_train_high).T], axis = 1)
         return np.array(x_train_new)
     else:
         x_train_new = []
-        for i in range(len(F_max)):
+        for i in range(x_train.shape[0]):
             x_train_new.append(pi_membership_function(x_train[i],c_low[i],lambda_low[i]))
             x_train_new.append(pi_membership_function(x_train[i],c_medium[i],lambda_medium[i]))
             x_train_new.append(pi_membership_function(x_train[i],c_high[i],lambda_high[i]))
-        return np.array(x_train_new)
+        return np.array(x_train_new).T
         
 
 # def input_fuzzify(x_train):
@@ -156,13 +159,11 @@ def output_fuzzify(x_train, y_train):
 """Fuzzification"""
 def fuzzify_dataset(x_train, x_test, y_train, y_test, iid = 0, cnn = 0):
     start = time.time()
-    x_train_fuzzy = np.array([])
     x_train_fuzzy = input_fuzzify(x_train, iid, cnn)
     end = time.time()
     print("Time taken to fuzzify - x_train :", end = ' ')
     print(end-start)
     start = time.time()
-    x_test_fuzzy = np.array([])
     x_test_fuzzy = input_fuzzify(x_test)
     end = time.time()
     print("Time taken to fuzzify - x_test :", end = ' ')
@@ -177,5 +178,5 @@ def fuzzify_dataset(x_train, x_test, y_train, y_test, iid = 0, cnn = 0):
     end = time.time()
     print("Time taken to fuzzify - y_train :", end = ' ')
     print(end-start)
-    return x_train_fuzzy.T, x_test_fuzzy.T, y_train_fuzzy, y_test_fuzzy
+    return x_train_fuzzy, x_test_fuzzy, y_train_fuzzy, y_test_fuzzy
     
