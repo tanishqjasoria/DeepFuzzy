@@ -25,7 +25,7 @@ def pi_membership_function(r,c,radius):
   if radius == 0:
     # Check whether this must return zeros or ones
     # Opinion: I think it should be ones
-    return np.zeros(eucledian_norm.shape)
+    return np.ones(eucledian_norm.shape)
   else:
     norm_by_radius = eucledian_norm/radius
     for i in range(len(r)):
@@ -196,7 +196,7 @@ def fuzzify_dataset(x_train, x_test, y_train, y_test, iid = 0, cnn = 0):
   start = time.time()
   y_test_fuzzy = y_test
   end = time.time()
-  print("Time taken to fuzzify - y_train :", end = ' ')
+  print("Time taken to fuzzify - y_test :", end = ' ')
   print(end-start)
   return x_train_fuzzy, x_test_fuzzy, y_train_fuzzy, y_test_fuzzy
 
